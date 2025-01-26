@@ -1,18 +1,4 @@
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: springboot
-    ports:
-      - "8080:8080"
-    depends_on:
-      - postgres
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/finanzas
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: 123
-
   postgres:
     image: postgres:17
     container_name: postgres
@@ -21,9 +7,33 @@ services:
       POSTGRES_PASSWORD: 123
       POSTGRES_DB: finanzas
     ports:
-        - "5432:5432"
+      - '5432:5432'
     volumes:
-        - postgres:/var/lib/postgresql/data
+      - postgres:/var/lib/postgresql/data
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: springboot
+    ports:
+      - '8080:8080'
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/finanzas
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: nextjs
+    ports:
+      - '3000:3000'
+    depends_on:
+      - backend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8080
 
 volumes:
-    postgres:
+  postgres:

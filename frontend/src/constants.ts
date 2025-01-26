@@ -13,7 +13,7 @@ export const MESES = [
   'Diciembre',
 ];
 
-export const FINANZAS_API = 'https://psa-squad7-tribub.onrender.com';
+export const FINANZAS_API = process.env.NEXT_PUBLIC_FINANZAS_API;
 export const FINANZAS_COSTOS = '/api/v1/finanzas/costos';
 export const FINANZAS_CARGAR_COSTO = '/api/v1/finanzas/cargar-costo';
 export const FINANZAS_ACTUALIZAR_COSTO = '/api/v1/finanzas/actualizar-costo/';
