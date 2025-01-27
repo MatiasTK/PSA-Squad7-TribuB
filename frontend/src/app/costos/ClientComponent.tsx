@@ -7,12 +7,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { FINANZAS_API, FINANZAS_PROYECTOS, MESES } from '@/constants';
+import { useToast } from '@/hooks/use-toast';
+import { fetchWithTimeout } from '@/lib/fetchWithTimeout';
+import { Proyectos } from '@/types/proyectosAPI';
 import { ChevronDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import Table from './Table';
-import { Proyectos } from '@/types/proyectosAPI';
-import { fetchWithTimeout } from '@/lib/fetchWithTimeout';
-import { useToast } from '@/hooks/use-toast';
 
 // Años posibles: desde el 2000 hasta la actualidad ordenados de forma descendente
 const years = Array.from(
@@ -46,15 +46,17 @@ export default function ClientComponent() {
       console.error(error);
       toast.toast({
         title: 'Error',
-        description: 'No se pudieron cargar los datos de los proyectos',
+        description:
+          'No se pudo conectar con la API del módulo externo, mostrando datos de prueba..',
         variant: 'destructive',
       });
 
       // Cargo datos de prueba, en caso de que en la demo todo salga mal
-      // const response = await fetch('/mock/proyectos.json');
-      // const data = await response.json();
+      const response = await fetch('/mock/proyectos.json');
+      const data = await response.json();
 
-      // setProjectsData(data[year]);
+      setProjectsData(data[year]);
+      setLoading(false);
     }
   };
 
